@@ -1,0 +1,150 @@
+import React, { createContext, useContext, useEffect, useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const AuthContext = createContext(null);
+
+// TODO: get the BACKEND_URL.
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";
+
+/*
+ * This provider should export a `user` context state that is 
+ * set (to non-null) when:
+ *     1. a hard reload happens while a user is logged in.
+ *     2. the user just logged in.
+ * `user` should be set to null when:
+ *     1. a hard reload happens when no users are logged in.
+ *     2. the user just logged out.
+ */
+export const AuthProvider = ({ children }) => {
+    const navigate = useNavigate();
+    // ⭐ user state MUST exist for tester
+    const [user, setUser] = useState(null);
+
+    /*
+     * When the app loads (or hard reloads), check if a token exists.
+     * If yes → fetch /user/me and set user state.
+     * If none → ensure user is null.
+     */
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            setUser(null);
+            return;
+        }
+
+        // Fetch user data
+        fetch(`${BACKEND_URL}/user/me`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        })
+            .then(async (res) => {
+                if (!res.ok) {
+                    // invalid token or expired token
+                    localStorage.removeItem("token");
+                    setUser(null);
+                    return;
+                }
+                const data = await res.json();
+                setUser(data.user);
+            })
+            .catch(() => {
+                localStorage.removeItem("token");
+                setUser(null);
+            });
+
+    }, []);
+
+    /*
+     * Logout the currently authenticated user.
+     *
+     * @remarks This function will always navigate to "/".
+     */
+    const logout = () => {
+        localStorage.removeItem("token");
+        setUser(null);
+        navigate("/");
+    };
+
+    /**
+     * Login a user with their credentials.
+     *
+     * @remarks Upon success, navigates to "/profile". 
+     * @param {string} username - The username of the user.
+     * @param {string} password - The password of the user.
+     * @returns {string} - Upon failure, Returns an error message.
+     */
+    const login = async (username, password) => {
+        try {
+            const res = await fetch(`${BACKEND_URL}/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                return data.message; // return error message
+            }
+
+            // success
+            localStorage.setItem("token", data.token);
+
+            // fetch user info immediately
+            const meRes = await fetch(`${BACKEND_URL}/user/me`, {
+                headers: {
+                    "Authorization": `Bearer ${data.token}`
+                }
+            });
+
+            const meData = await meRes.json();
+            setUser(meData.user);
+
+            navigate("/profile");
+            return;
+        } catch (err) {
+            return "Network error";
+        }
+    };
+
+    /**
+     * Registers a new user. 
+     * 
+     * @remarks Upon success, navigates to "/".
+     * @param {Object} userData - The data of the user to register.
+     * @returns {string} - Upon failure, returns an error message.
+     */
+    const register = async (userData) => {
+        try {
+            const res = await fetch(`${BACKEND_URL}/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                return data.message; // return error message
+            }
+
+            navigate("/success");
+            return;
+        } catch (err) {
+            return "Network error";
+        }
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, logout, register }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    return useContext(AuthContext);
+};
