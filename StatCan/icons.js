@@ -94,9 +94,17 @@ export const SVG_USAGE_MAP = {
   ========================= */
 
   timeToComplete: {
+    "10 minutes": {
+      en: { href: "#icon-10-mins", label: "10 minutes course", width: 100 },
+      fr: { href: "#icon-10-mins", label: "Cours de 10 minutes", width: 100 }
+    },
     "1 hour": {
       en: { href: "#icon-1-hour", label: "1 hour course", width: 100 },
       fr: { href: "#icon-1-heure", label: "Cours d’une heure", width: 100 }
+    },
+    "2 hours": {
+      en: { href: "#icon-2-hours", label: "2 hours course", width: 100 },
+      fr: { href: "#icon-2-heures", label: "Cours de 2 heures", width: 100 }
     },
     "1 hour/ month": {
       en: { href: "#icon-1-hour-month", label: "1 hour per month course", width: 140 },
@@ -107,8 +115,16 @@ export const SVG_USAGE_MAP = {
       fr: { href: "#icon-1-2-heures", label: "Cours de 1 à 2 heures", width: 120 }
     },
     "1.5 hours": {
-      en: { href: "#icon-1-5-hours", label: "1.5 hour course", width: 120 },
-      fr: { href: "#icon-1-5-heures", label: "Cours de 1,5 heure", width: 120 }
+      en: { href: "#icon-1-5-hours", label: "1.5 hours course", width: 120 },
+      fr: { href: "#icon-1-5-heures", label: "Cours de 1.5 heures", width: 120 }
+    },
+    "1.5 hour": {
+      en: { href: "#icon-1-5-hours", label: "1.5 hours course", width: 120 },
+      fr: { href: "#icon-1-5-heures", label: "Cours de 1.5 heures", width: 120 }
+    },
+    "2.5 hours": {
+      en: { href: "#icon-2-5-hours", label: "2.5 hours course", width: 100 },
+      fr: { href: "#icon-2-5-heures", label: "Cours de 2.5 heures", width: 100 }
     },
     "less than 1 hour": {
       en: { href: "#icon-lt-1-hour", label: "Less than 1 hour course", width: 100 },
@@ -135,6 +151,7 @@ export const SVG_USAGE_MAP = {
 
     // 3 hours (FR typo in source list)
     "3 hours": {
+      en: { href: "#icon-3-hours", label: "3 hours course", width: 100 },
       fr: { href: "#icon-3-heures", label: "Cours de 3 heures", width: 100 }
     },
 
@@ -211,6 +228,10 @@ export const SVG_USAGE_MAP = {
     "virtual classroom": {
       en: { href: "#icon-virtual-classroom-en", label: "Virtual Classroom", width: 100 },
       fr: { href: "#icon-virtual-classroom-fr", label: "Classe virtuelle", width: 100 }
+    },
+    video: {
+      en: { href: "#icon-video-en", label: "Video", width: 100 },
+      fr: { href: "#icon-video-fr", label: "Vidéo", width: 100 }
     },
     reserve: {
       en: { href: "#icon-reserve-en", label: "Limited avilability, book in advance!", width: 100 },
@@ -333,6 +354,7 @@ export const ACTIVITY_ICON_MAP = {
   "job aid": ACTIVITY_ICONS["job-aid"],
   "online": ACTIVITY_ICONS["e-learning"],
   "virtual classroom": ACTIVITY_ICONS["virtual-classroom"],
-  "webinars": ACTIVITY_ICONS["video"]
+  "webinars": ACTIVITY_ICONS["video"],
+  "video": ACTIVITY_ICONS["video"]
 };
 

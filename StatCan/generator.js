@@ -32,7 +32,7 @@ function resolveSvg(categoryMap, rawEn, rawFr) {
   const frKey = normalizeKey(rawFr);
 
   const en = categoryMap[enKey]?.en;
-  const fr = categoryMap[frKey]?.fr;
+  const fr = categoryMap[frKey]?.fr ? categoryMap[frKey]?.fr: categoryMap[enKey]?.fr;
 
   return { en, fr };
 }
